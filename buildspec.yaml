@@ -14,7 +14,7 @@ phases:
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7) # Extracting first 7 characters of the commitID to use it as ImageTag
       - docker build -t $ECR_REPO:latest .
       - docker tag $ECR_REPO:latest $ECR_REPO:$IMAGE_TAG
-      - aws cloudformation package --template-file aws/template.yaml --s3-bucket $S3_BUCKET --output-template-file template-output.yaml
+      - aws cloudformation package --template-file cloudformation/template.yaml --s3-bucket $S3_BUCKET --output-template-file template-output.yaml
   post_build:
     commands:
       - docker push $ECR_REPO:latest # Pushing the image to AWS ECR

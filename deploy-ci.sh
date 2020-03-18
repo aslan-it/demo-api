@@ -7,7 +7,7 @@ RepositoryName="demo-api"
 DockerImageRepository="demo-api"
 
 aws cloudformation deploy \
-    --template-file aws/pipeline.yaml \
+    --template-file cloudformation/pipeline.yaml \
     --stack-name ${ProjectName}-pipeline \
     --parameter-overrides \
         ProjectName=${ProjectName} \

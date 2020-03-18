@@ -40,3 +40,11 @@ aws cloudformation create-stack --template-body file://$PWD/aws/app-cluster.yml 
 aws cloudformation create-stack --template-body file://$PWD/aws/api.yml --stack-name api
 
 ```
+# CodePipeline
+http://ecs-services-347305667.eu-central-1.elb.amazonaws.com/api/hello
+
+Demo api; ECR image on ECS
+- CodePipeline + Github
+```
+./deploy-ci.sh
+```
