@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  example-lambda-sns
+  Example CloudFormation template to subscribe a lambda to an SNS Topic.
+Resources:
+  ExampleTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: !Sub 'example-sns-topic'
+      TopicName: !Sub 'example-sns-topic'
+      Subscription:
+        - Protocol: lambda
+          Endpoint: !ImportValue 'MyLambdaFunction'
+
+  ExampleTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
+      Topics:
+        - !Ref ExampleTopic
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: 'sns:Publish'
+            Resource: !Ref ExampleTopic
+            Principal:
+              AWS: '*'
+            Condition:
+              ArnLike:
+                AWS:SourceArn: !Sub 'arn:aws:*:*:${AWS::AccountId}:*'

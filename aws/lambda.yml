@@ -1,0 +1,87 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Example Lambda dynamo'
+
+Resources:
+  MyLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Path: /
+      Policies:
+        - PolicyName: lambda-processing
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                Resource: !ImportValue 'DemoTable'
+
+  MyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: DynamoDb get
+      Handler: index.lambda_handler
+      Runtime: python2.7
+      Role: !GetAtt 'MyLambdaRole.Arn'
+      Timeout: 240
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          dynamodb = boto3.resource('dynamodb')
+          table = dynamodb.Table('DemoTable')
+
+          def lambda_handler(event, context):
+            message = event['Records'][0]['Sns']['Message']
+            parsed_message = json.loads(message)
+            print("From event: " + message)
+            response = lambda_put_item(parsed_message['key'], parsed_message['value'])
+            return {
+              'statusCode': 200,
+              'body': response
+            }
+
+          def lambda_get_item(event, context):
+            response = table.get_item(
+              Key={
+                'key': 'testKey'
+              }
+            )
+            return response
+
+          def lambda_put_item(key, value):
+            table.put_item(
+              Item={
+                'key': key,
+                'value': value
+              }
+            )
+            print(response)
+            return {
+              'message': 'item added'
+            }
+
+  ExampleFunctionInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref MyLambdaFunction
+      Principal: sns.amazonaws.com
+
+Outputs:
+  TableName:
+    Value: !GetAtt 'MyLambdaFunction.Arn'
+    Description: For demo api
+    Export:
+      Name: 'MyLambdaFunction'
