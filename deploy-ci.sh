@@ -4,7 +4,7 @@ set -eo pipefail
 
 ProjectName="demo-api"
 RepositoryName="demo-api"
-DockerImageRepository="demo-ap"
+DockerImageRepository="demo-api"
 
 aws cloudformation deploy \
     --template-file aws/pipeline.yaml \
