@@ -5,9 +5,11 @@ Parameters:
   DockerImageRepository:
     Type: String
     Description: The name of docker repository
+    Default: "demo-api"
   ImageTag:
     Type: String
     Description: The tag of the docker image to be deployed
+    Default: "latest"
 
 Resources:
   VPC:
@@ -229,6 +231,6 @@ Outputs:
 
   ApiEndpoint:
     Description: Demo API Endpoint
-    Value: !Join ['', ['http://', !GetAtt LoadBalancer.DNSName, '/hello']]
+    Value: !Join ['', ['http://', !GetAtt LoadBalancer.DNSName, '/api/hello']]
     Export:
       Name: 'DemoApiEndpoint'
