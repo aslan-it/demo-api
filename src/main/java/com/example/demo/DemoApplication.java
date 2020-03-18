@@ -16,7 +16,7 @@ public class DemoApplication {
 
     @GetMapping("/api/hello")
     public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        System.out.println("Hello" + name);
-        return String.format("Hello3 %s!", name);
+        System.out.println("ECR image on ECS! -  Hello" + name);
+        return String.format("ECR image on ECS - Hello %s!", name);
     }
 }
