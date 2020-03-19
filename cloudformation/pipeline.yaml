@@ -221,7 +221,11 @@ Resources:
                   - ecr:*
                 Resource:
                   - "*"
-
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                Resource:
+                  - "arn:aws:secretsmanager:eu-central-1:106060261984:secret:prod/sonar-VhCm9T"
   #
   # Service role according to https://docs.aws.amazon.com/lambda/latest/dg/build-pipeline.html
   #
@@ -325,8 +329,3 @@ Resources:
                   #Resource:
                   #- !Sub arn:aws:cloudformation:${AWS::Region}:aws:transform/Serverless-2016-10-31
                   #- !Sub arn:aws:cloudformation:${AWS::Region}:aws:transform/Include
-              - Effect: Allow
-                Action:
-                  - secretsmanager:GetSecretValue
-                Resource:
-                  - "arn:aws:secretsmanager:eu-central-1:106060261984:secret:prod/sonar-VhCm9T"
