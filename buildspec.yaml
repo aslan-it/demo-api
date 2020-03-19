@@ -1,5 +1,12 @@
 version: 0.2
 
+env:
+  secrets-manager:
+    LOGIN: prod/sonar:sonartoken
+    HOST: prod/sonar:HOST
+    Organization: prod/sonar:Organization
+    Project: prod/sonar:Project
+
 phases:
   install:
     runtime-versions:
@@ -8,6 +15,14 @@ phases:
     commands:
       - apt-get -y install moreutils # For using 'sponge' later
       - mvn clean install # Creates a jar file
+  pre_build:
+    commands:
+      - mvn clean compile test
+      - mvn sonar:sonar -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project -Dsonar.organization=$Organization
+      - sleep 5
+      - curl $HOST:9000/api/qualitygates/project_status?projectKey=$Project >result.json
+      - cat result.json
+      - if [ $(jq -r '.projectStatus.status' result.json) = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ;fi
   build:
     commands:
       - $(aws ecr get-login --no-include-email --region $AWS_REGION) # Login to AWS ECR
