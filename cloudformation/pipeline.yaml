@@ -325,3 +325,8 @@ Resources:
                   #Resource:
                   #- !Sub arn:aws:cloudformation:${AWS::Region}:aws:transform/Serverless-2016-10-31
                   #- !Sub arn:aws:cloudformation:${AWS::Region}:aws:transform/Include
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                Resource:
+                  - !Sub arn:aws:iam::${AWS::AccountId}:secret:prod/sonar*
