@@ -18,7 +18,7 @@ phases:
   pre_build:
     commands:
       - mvn clean compile test
-      - mvn sonar:sonar -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project -Dsonar.organization=$Organization
+      - mvn sonar:sonar -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project
       - sleep 5
       - curl $HOST:9000/api/qualitygates/project_status?projectKey=$Project >result.json
       - cat result.json
