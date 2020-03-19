@@ -214,6 +214,16 @@ Resources:
                   - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}-build-package:*
               - Effect: Allow
                 Action:
+                  - s3:*
+                Resource:
+                  - !Sub arn:aws:s3:::${ArtifactsBucket}/*
+              - Effect: Allow
+                Action:
+                  - ecr:*
+                Resource:
+                  - "*"
+              - Effect: Allow
+                Action:
                   - secretsmanager:GetSecretValue
                 Resource:
                   - arn:aws:secretsmanager:eu-central-1:106060261984:secret:prod/sonar-VhCm9T
