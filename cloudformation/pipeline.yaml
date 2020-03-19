@@ -226,7 +226,7 @@ Resources:
                 Action:
                   - secretsmanager:GetSecretValue
                 Resource:
-                  - "*"
+                  - !Sub arn:aws:secretsmanager:eu-central-1:106060261984:secret:prod/sonar-VhCm9T
 
   #
   # Service role according to https://docs.aws.amazon.com/lambda/latest/dg/build-pipeline.html
